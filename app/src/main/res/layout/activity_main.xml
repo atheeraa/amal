@@ -14,8 +14,9 @@
         android:id="@+id/nav_view"
          android:background="@android:color/transparent"
         app:menu="@menu/drawer_menu"
+         android:layout_marginTop="50dp"
          app:elevation="0dp"
-        app:itemTextColor="@color/bg"
+        app:itemTextColor="#FFFFFF"
         app:itemTextAppearance="@style/Widget.Design.NavigationView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -42,23 +43,7 @@
         android:src="@drawable/bg"
        />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hope"
-        android:id="@+id/logo"
-        android:textSize="80sp"
-        android:textStyle="bold"
-        android:fontFamily="cursive"
-        android:padding="16dp"
-        android:textColor="@android:color/white"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="64dp"
-        android:shadowColor="@color/colorPrimaryDark"
-        android:shadowRadius="1"
-        android:shadowDx="3"
-        android:shadowDy="4"
-        />
+
 
     <ImageView
         android:id="@+id/whiteScreen"
@@ -100,8 +85,7 @@
             android:textSize="24sp"
             android:textStyle="bold"
             android:shadowColor="@color/bg"
-            android:text="mniposbnpiodfsbnpdfisovnpdiofnbfvrsfvispdfibvn"
-            android:textColor="@android:color/white"
+             android:textColor="@android:color/white"
             android:id="@+id/sentence"
             />
 
@@ -113,7 +97,7 @@
             android:orientation="horizontal"
             android:layout_gravity="bottom|center">
                <CheckBox
-
+                android:layout_marginLeft="16dp"
                android:checked="false"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -128,6 +112,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/collection"/>
             <ImageView
+                android:layout_marginRight="16dp"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:id="@+id/share"
