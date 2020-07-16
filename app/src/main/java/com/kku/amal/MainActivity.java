@@ -30,13 +30,15 @@ import java.util.List;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity  {
-    LinearLayout area;
-    RelativeLayout holder;
-    CheckBox fav;
-    ImageView share;
-    String Select;
-    List<String> list;
-    TextView textView;
+
+
+    LinearLayout area; //تحتوي على العبارة و الازرار الصغار اللي تحت
+    RelativeLayout holder;// علامة الرسالة اللي أول ما نفتح الأبلكيشن
+    CheckBox fav; // زر الاعجاب
+    ImageView share; // زر المشاركة
+    String Select; // راح نحفظ فيها العبارة اللي بنختارها بشكل عشوائي من العبارات اللي بنجيبها من فايربيس
+    List<String> list; // لستة العبارات اللي بنجيبها من فايربيس
+    TextView textView; // بنحط العبارة في هالتكست فيو
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,49 +49,73 @@ public class MainActivity extends AppCompatActivity  {
         textView = findViewById(R.id.sentence);
 
 
-        // the drawer
+        // the drawer الدرور اللي نسحبه من جنب
+        // قاعدين نربطه بالدرور اللي في ملف ال xml
+        // وبعدها نستعمل فنكشن onNavigationItemSelected عشان نحدد وش يصير لما ينضغط على كل منها
+        // بس قبل ذلك راح ننادي فايربيس ونتأكد هل اليوزر مسجل أو لا؟ عشان لو مو مسجل ما له بيانات في المفضلة أو الكولكشن
+        // فلازم أولاً يسجل دخول
         final  DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+        //قاعدين نقول لشاشة التنقل هذي تكون الأولى على الواجهة
         navigationView.bringToFront();
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                //  نبغى نحدد وش الزر اللي ضغطه المستخدم من المنيو
                 int id = menuItem.getItemId();
+                // الانتنت بنستعمله للتنقل ما بين الاكتفتيز
                 Intent intent;
+                // قاعدين نستعمل خدمة ال authentication  من فايربيس، عشان نعرف مين اليوزر المسجل حالياً
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-                //it's possible to do more actions on several items, if there is a large amount of items I prefer switch(){case} instead of if()
-                switch (id) {
-                    case R.id.collectionsnav: // Change this as your menuitem in menu.xml.
-
+                // الحين بنبدأ نحدد وش يصير لما ينضغط كل شيء في المنيو، عناصر المنيو هذي بتلقونها في مجلد المنيو، ملف drawer_menu
+                 switch (id) {
+                     // زر الكولكشنز
+                    case R.id.collectionsnav:
+                        // إذا اليوزر مسجل دخول، أبغاك تنتقل عادي إلى صفحة الكولكشنز
                         if (user != null) {
                             // User is signed in
+                            // الانتنت هذي للتنقل مابين المين اكتفتي اللي احنا فيها الان إلى صفحة الكولكشنز
+
                             intent = new Intent(MainActivity.this, CollectionsActivity.class);
                             startActivity(intent);
 
 
-                        } else {
+                        }
+                        // إذا اليوزر مو مسجل دخول، أبغاك تنتقل أولاً إلى صفحة تسجيل الدخول، خله يسجل أول
+                        else {
                             // No user is signed in
+                            // الانتنت هذي للتنقل مابين المين اكتفتي اللي احنا فيها الان إلى صفحة التسجيل
                             intent = new Intent(MainActivity.this, Sign.class);
                             startActivity(intent);
 
                         }
                         break;
-                    case R.id.account: // Change this as your menuitem in menu.xml.
-                         if (user != null) {
+
+                    case R.id.account:
+                        // إذا اليوزر مسجل دخول، أبغاك تنتقل عادي إلى صفحة المستخدم
+                        if (user != null) {
                             // User is signed in
+                            // الانتنت هذي للتنقل مابين المين اكتفتي اللي احنا فيها الان إلى صفحة المستخدم
+
                             intent = new Intent(MainActivity.this, MyAccount.class);
                             startActivity(intent);
-System.out.print("account clicccccccccc");
 
-                        } else {
+                        }
+                        // إذا اليوزر مو مسجل دخول، أبغاك تنتقل أولاً إلى صفحة تسجيل الدخول، خله يسجل أول
+
+                        else {
                             // No user is signed in
+                            // الانتنت هذي للتنقل مابين المين اكتفتي اللي احنا فيها الان إلى صفحة التسجيل
+
                             intent = new Intent(MainActivity.this, Sign.class);
                             startActivity(intent);
 
                         }
                         break;
-                    case R.id.favnav: // Change this as your menuitem in menu.xml.
+
+                        // بنفس الطريقة صفحة المفضلة
+                    case R.id.favnav:
                         if (user != null) {
                             // User is signed in
                             intent = new Intent(MainActivity.this, Favorites.class);
@@ -103,29 +129,28 @@ System.out.print("account clicccccccccc");
 
                         }
                         break;
-                    case R.id.home: // Change this as your menuitem in menu.xml.
-
-                            intent = new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(intent);
-
-
-                        break;
 
                 }
-                //This is for maintaining the behavior of the Navigation view
-                //This is for closing the drawer after acting on it
+
+                // هنا عشان نقفل الدرور لما خلاص ينضغط ويسوي مهمته
                 drawer.closeDrawer(GravityCompat.START);
                 return true;
             }
         });
+
+        // أول ما يفتح البرنامج أبغى المساحة اللي فيها العبارة و الازرار تكون مخفية، أنا هنا مسميتها area
         area = findViewById(R.id.area);
         area.setVisibility(View.INVISIBLE);
 
+        // الهولدر هو علامة الرسالة الصغيرة الي نضغطها و تورينا العبارة
         holder = findViewById(R.id.holder);
+        // هنا نحدد لما ينضغط وش نسوي؟
         holder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //لما ينضغط أبغى خلاص تختفي علامة الرسالة
                 holder.setVisibility(View.INVISIBLE);
+                // وتظهر المساحة اللي تحتوي على العبارة و الازرار الصغار اللي تحت
                 area.setVisibility(View.VISIBLE);
 
             }
@@ -133,17 +158,28 @@ System.out.print("account clicccccccccc");
 
 
         /// Ref to access sentences
-
+        // هنا نسوي رفرنس، عشان ننادي الديتابيس الي في فايربيس
         FirebaseDatabase database = FirebaseDatabase.getInstance();
+        // الديتابيس تحتوي على عنصر رئيسي سميته sentences  فقاعدين ننادي البيانات اللي تقع في هالمسار
         DatabaseReference ref = database.getReference("sentences");
+
         ref.addValueEventListener(new ValueEventListener() {
+            // هذي الفنكشن يتم ندائها لما يصير فيه تغير في البيانات
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                // نسوي instantiations  لللست
                 list = new ArrayList<>();
+                // فور لوب على قد ال children  اللي في الديتابيس اللي يقعون في ال sentences
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    // جيب العبارات و خزنها في ال sentence
                     String sentence = ds.getValue(String.class);
+                    // أضف العبارات للست
                     list.add(sentence);
                 }
+                // هنا بنشوف اللست كاملة وراح نستعمل كلاس random  عشان نختار أحد العناصر اللي في
+                // اللست بشكل عشوائي
+                // وراح نعرضها في التكست فيو
+                // عن طريق setText
                 Random r = new Random();
                 int n = list.size();
                 if (!list.isEmpty()) {
@@ -154,79 +190,88 @@ System.out.print("account clicccccccccc");
             }
 
             @Override
+            // لو صار فيه أي خطأ في القراءة من الديتابيس نقدر نحدد اش يصير هنا
+            // حالياً ما سوينا شيء فعلي، ما راح يظهر شيء للمستخدم
+            // بس سوينا جملة طباعة عشان نعرف احنا كمبرمجين اش الخطأ اللي صار
+            // بس ممكن نظهر للمستخدم عبارة نقول له فيه خطا؟ ليش لا
+            // لتس دو ات !
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println("The read failed: " + databaseError.getCode());
 
             }
         });
+
+        // هنا بنحدد اش بيصير لما ينضغط زر الإعجاب
+
         fav = findViewById(R.id.fav);
         fav.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener() {
 
             @Override
+
             public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
+                // أولا بنتأكد لو فيه يوزر مسجل أو لا
                 final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference ref = database.getReference();
-
+                // تذكروا ان الاعجاب كان تشيك بوكس مو زر، بالتالي له أحد حالتين ، تشيكد أو مو تشيكد
                 if(fav.isChecked()){
-                if (user != null) {
+                  // هل اليوزر مسجل؟
+                    if (user != null) {
+                    // إذا ايه إذن اصنع له قائمة مفضلة، تندرج تحت اليوزر حقه
+                    ref.child("users").child(user.getUid()).child("favorites")
+                            //بأشرح لكم في فيديو اش يعني السطرين التاليين
+                            .child(user.getUid()+textView.getText().subSequence(0,3))
+                            .setValue(textView.getText());
 
-                    ref.child("users").child(user.getUid()).child("favorites").child(user.getUid()+textView.getText().subSequence(0,3)).setValue(textView.getText());
+
+                    // التوست هي التنبيهات الصغييرة اللي تطلع لليوزر تحت، هنا بس قلنا له أوكي أضفناها
                     Toast.makeText(MainActivity.this, "added"+textView.getText(),
                             Toast.LENGTH_SHORT).show();
-                } else {
+                }
+                    // هنا لو اليوزر مو مسجل! نقول له سجل أولاً عزيزي
+                    else {
+
                     Toast.makeText(MainActivity.this, "You're not signed in",
                             Toast.LENGTH_SHORT).show();
                 }
 
             }
+                // هنا لو اليوزر مسجل، بس ضغط ضغطة ثانية على زر الاعجاب، بمعنى شال اللايك
             else{
                     if (user != null) {
-
-                    ref.child("users").child(user.getUid()).child("favorites").child(user.getUid()+textView.getText().subSequence(0,3)).removeValue();
+                        // راح نقول له احذف العبارة هذي من المفضلة
+                        // مرة أخرى، بأشرح لكم ليش سويت هالمسار
+                    ref.child("users").child(user.getUid()).child("favorites")
+                            .child(user.getUid()+textView.getText()
+                                    .subSequence(0,3)).removeValue();
             }}
             }
         } );
 
-
-
-                /*setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference ref = database.getReference();
-                if (user != null) {
-
-                                ref.child("users").child(user.getUid()).child("favorites").push().setValue(textView.getText());
-                            Toast.makeText(MainActivity.this, "added"+textView.getText(),
-                                    Toast.LENGTH_SHORT).show();
-
-
-
-
-                } else {
-                    Toast.makeText(MainActivity.this, "You're not signed in",
-                            Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        });
-*/
+        //اش يصير لما ينضغط على زر المشاركة
         share = findViewById(R.id.share);
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // تتذكرون الانتنتس؟ هذا استعمال ثاني لها، اعتبروها طريقة تنقل في الأبلكيشن أو من الابلكيشن لابلكيشنز ثانين
                 Intent sendIntent = new Intent();
+                // نوع الانتنت ارسال
                 sendIntent.setAction(Intent.ACTION_SEND);
                 sendIntent.putExtra(Intent.EXTRA_TEXT, Select);
+                // نوع البيانات اللي بتنرسل نص
                 sendIntent.setType("text/plain");
 
+                // بنسوي لها شير
                 Intent shareIntent = Intent.createChooser(sendIntent, null);
                 startActivity(shareIntent);
 
             }
         });
+
+
+        // الكولكشينز للآن ما سويتها
+        // let's do it together
+
 
         /*
         collection = findViewById(R.id.fav);
@@ -240,38 +285,6 @@ System.out.print("account clicccccccccc");
         });*/
 
 
-    }
-    public void onCheckboxClicked(View view) {
-        // Is the view now checked?
-        boolean checked = ((CheckBox) view).isChecked();
-
-        // Check which checkbox was clicked
-        switch(view.getId()) {
-            case R.id.fav:
-                if (checked){
-                    final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference ref = database.getReference();
-                if (user != null) {
-
-                    ref.child("users").child(user.getUid()).child("favorites").child(user.getUid()+"1").setValue(textView.getText());
-                    Toast.makeText(MainActivity.this, "added"+textView.getText(),
-                            Toast.LENGTH_SHORT).show();
-
-
-
-
-                } else {
-                    Toast.makeText(MainActivity.this, "You're not signed in",
-                            Toast.LENGTH_SHORT).show();
-                }
-
-        }
-                else{
-
-                }
-    }
     }
 
 }
