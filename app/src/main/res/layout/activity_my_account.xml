@@ -5,6 +5,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     android:fitsSystemWindows="true"
     tools:context=".MyAccount"
     tools:openDrawer="start">
@@ -17,6 +18,7 @@
         android:layout_marginTop="50dp"
         android:background="@android:color/transparent"
         android:fitsSystemWindows="true"
+        android:fontFamily="@font/curs"
         app:elevation="0dp"
         app:headerLayout="@layout/nav_header_main"
         app:itemBackground="@color/ti"
@@ -32,15 +34,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/bg"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerHorizontal="true"
-            android:paddingRight="500dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/bg" />
-
 
         <ImageView
             android:id="@+id/whiteScreen"
@@ -53,70 +46,51 @@
 
 
         <LinearLayout
-            android:layout_width="350dp"
-            android:layout_height="550dp"
+            android:layout_width="320dp"
+            android:layout_height="520dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
             android:layout_centerInParent="true"
-            android:orientation="horizontal">
-
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginStart="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Name"
-                    android:textColor="#ffffff"
-                    android:textSize="20sp"
-                    android:padding="8dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Email"
-                    android:textColor="#ffffff"
-                    android:textSize="20sp"
-                    android:padding="8dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="My Favorites"
-                    android:textColor="#ffffff"
-                    android:textSize="20sp"
-                    android:padding="8dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="My Collections"
-                    android:textColor="#ffffff"
                     android:padding="8dp"
-                    android:textSize="20sp" />
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <EditText
-                    android:id="@+id/name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-
+                    android:text="Email"
+                    android:fontFamily="@font/curs"
+                    android:textColor="#ffffff"
+                    android:textSize="24sp" />
                 <EditText
                     android:id="@+id/email"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/curs"
+                    android:textColor="#1E1818"
+                    android:textSize="24sp"/>
 
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:padding="8dp"
+                    android:id="@+id/favtv"
+                    android:text="My Favorites"
+                    android:fontFamily="@font/curs"
+                    android:textColor="#ffffff"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:id="@+id/collecttv"
+                    android:text="My Collections"
+                    android:fontFamily="@font/curs"
+                    android:textColor="#ffffff"
+                    android:textSize="24sp" />
 
         </LinearLayout>
 
@@ -124,10 +98,10 @@
             android:id="@+id/logout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="50dp"
-            android:layout_centerInParent="true"
             android:layout_alignBottom="@id/whiteScreen"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:layout_marginBottom="50dp"
             android:text="Log out" />
     </RelativeLayout>
 </androidx.drawerlayout.widget.DrawerLayout>

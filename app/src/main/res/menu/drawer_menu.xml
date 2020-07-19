@@ -13,11 +13,11 @@
         <item
             android:id="@+id/collectionsnav"
             android:title="Collections" />
-        <item
-            android:id="@+id/contactnav"
-            android:title="Contact us" />
 
         <item android:id="@+id/account"
-            android:title="My account"/>
+            android:title="My Account"/>
+
+        <item android:id="@+id/settings"
+            android:title="Settings"/>
     </group>
 </menu>

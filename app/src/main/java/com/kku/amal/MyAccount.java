@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
@@ -21,16 +22,18 @@ import com.google.firebase.auth.FirebaseUser;
 public class MyAccount extends AppCompatActivity {
 
     Button logout;
-    EditText nameet, emailet;
+    EditText  emailet;
+    TextView favtv, collecttv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_account);
         logout = findViewById(R.id.logout);
-        nameet = findViewById(R.id.name);
-        emailet = findViewById(R.id.email);
+         emailet = findViewById(R.id.email);
 
+         favtv = findViewById(R.id.favtv);
+         collecttv= findViewById(R.id.collecttv);
 
         final DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -64,7 +67,6 @@ public class MyAccount extends AppCompatActivity {
                             // User is signed in
                             intent = new Intent(getApplicationContext(), MyAccount.class);
                             startActivity(intent);
-                            System.out.print("account clicccccccccc");
 
                         } else {
                             // No user is signed in
@@ -105,10 +107,8 @@ public class MyAccount extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             // Name, email address, and profile photo Url
-            String name = user.getDisplayName();
-            String email = user.getEmail();
+             String email = user.getEmail();
 
-            nameet.setText(name);
             emailet.setText(email);
             // Check if user's email is verified
             boolean emailVerified = user.isEmailVerified();
@@ -137,5 +137,24 @@ public class MyAccount extends AppCompatActivity {
             }
         });
 
-    }
+        favtv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MyAccount.this, Favorites.class);
+                startActivity(intent);
+
+            }}
+        );
+
+        collecttv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MyAccount.this, CollectionsActivity.class);
+                startActivity(intent);
+
+            }}
+        );
+
+
+        }
 }

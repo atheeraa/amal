@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity  {
     String Select; // راح نحفظ فيها العبارة اللي بنختارها بشكل عشوائي من العبارات اللي بنجيبها من فايربيس
     List<String> list; // لستة العبارات اللي بنجيبها من فايربيس
     TextView textView; // بنحط العبارة في هالتكست فيو
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -186,7 +188,6 @@ public class MainActivity extends AppCompatActivity  {
                     String Select = list.get((r.nextInt(n)));
                     textView.setText(Select);
                 }
-
             }
 
             @Override
@@ -211,6 +212,8 @@ public class MainActivity extends AppCompatActivity  {
             public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
                 // أولا بنتأكد لو فيه يوزر مسجل أو لا
                 final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference ref = database.getReference();
                 // تذكروا ان الاعجاب كان تشيك بوكس مو زر، بالتالي له أحد حالتين ، تشيكد أو مو تشيكد

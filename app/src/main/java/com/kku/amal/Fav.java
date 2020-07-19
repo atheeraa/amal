@@ -1,5 +1,7 @@
 package com.kku.amal;
 
+import java.util.ArrayList;
+
 public class Fav {
 
 
@@ -15,10 +17,9 @@ public class Fav {
         return like;
     }
 
-    // Store the name of the movie
     private String sentence;
-    // Store the release date of the movie
     private String collection;
+    ArrayList<Fav> a;
 
     public void setSentence(String sentence) {
         this.sentence = sentence;
@@ -35,10 +36,12 @@ public class Fav {
     private boolean like;
 
     // Constructor that is used to create an instance of the Movie object
-    public Fav( String sentence) {
+    public Fav(  String sentence) {
         this.sentence = sentence;
 
     }
-
+    public Object getItem(int position) {
+        return a.get(position);
+    }
 
 }

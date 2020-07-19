@@ -7,48 +7,42 @@
 
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_weight="2"
-        android:layout_height="wrap_content">
+        android:layout_weight="3"
+        android:layout_height="40dp"
+        android:focusable="false">
 
         <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#ffffff"
-        android:textSize="16sp"
+        android:textSize="20sp"
+        android:focusable="false"
+            android:fontFamily="@font/curs"
         />
     </LinearLayout>
 
 
-    <LinearLayout
-        android:id="@+id/buttons"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_gravity="right"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
         <CheckBox
             android:id="@+id/fav"
-           android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:gravity="right"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
+            android:clickable="false"
             android:button="@drawable/favcheckbox"
-            android:checked="false"
-            android:stateListAnimator="@anim/favanimate" />
+            android:checked="true"
+            android:focusable="false"
+            />
 
-        <ImageView
-            android:id="@+id/collection"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/collection" />
 
-        <ImageView
-            android:id="@+id/share"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="16dp"
-            android:src="@drawable/share" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/wholetext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#ffffff"
+        android:visibility="gone"
+        android:fontFamily="@font/curs"
+        />
 
 </LinearLayout>

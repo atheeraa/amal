@@ -80,7 +80,6 @@ public class Sign extends AppCompatActivity {
                             // User is signed in
                             intent = new Intent(getApplicationContext(), MyAccount.class);
                             startActivity(intent);
-                            System.out.print("account clicccccccccc");
 
                         } else {
                             // No user is signed in
