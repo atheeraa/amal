@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:fitsSystemWindows="true"
+    tools:context=".SettingsActivity"
+    tools:openDrawer="start">
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_gravity="start"
+
+        android:background="@android:color/transparent"
+        android:fontFamily="@font/curs"
+        app:elevation="0dp"
+        app:headerLayout="@layout/nav_header_main"
+        app:itemBackground="@color/ti"
+        app:itemIconPadding="60dp"
+        app:itemTextAppearance="@style/Widget.Design.NavigationView"
+        app:itemTextColor="#FFFFFF"
+        app:menu="@menu/drawer_menu"
+        app:theme="@style/navItems" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/whiteScreen"
+            android:layout_width="350dp"
+            android:layout_height="550dp"
+            android:layout_centerInParent="true"
+            android:alpha=".4"
+            android:scaleType="centerCrop"
+            android:src="@drawable/g" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="70dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/Bg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/curs"
+                android:shadowColor="@color/bg"
+                android:text="Background Color"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txt_color"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/curs"
+                android:shadowColor="@color/bg"
+                android:text="Text Color"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txt_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/curs"
+                android:shadowColor="@color/bg"
+                android:text="Text Size"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <RelativeLayout
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <com.flask.colorpicker.ColorPickerView
+                    android:id="@+id/color_picker_view"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:visibility="invisible"
+                    app:alphaSlider="true"
+                    app:density="12"
+                    app:lightnessSlider="true"
+                    app:wheelType="FLOWER" />
+
+
+                <com.flask.colorpicker.ColorPickerView
+                    android:id="@+id/txt_color_picker"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:visibility="invisible"
+                    app:alphaSlider="true"
+                    app:density="12"
+                    app:lightnessSlider="true"
+                    app:wheelType="FLOWER" />
+
+
+
+            </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+
+</androidx.drawerlayout.widget.DrawerLayout>

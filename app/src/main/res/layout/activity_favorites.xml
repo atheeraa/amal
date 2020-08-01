@@ -8,7 +8,7 @@
     android:fitsSystemWindows="true"
     tools:context=".Favorites"
     tools:openDrawer="start"
-    android:background="@color/background">
+    android:background="#D24E9F3D">
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
@@ -33,7 +33,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
+        <TextView
+            android:layout_centerHorizontal="true"
+            android:id="@+id/title"
+            android:layout_above="@id/whiteScreen"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:shadowColor="@color/bg"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/curs"/>
 
         <ImageView
             android:id="@+id/whiteScreen"

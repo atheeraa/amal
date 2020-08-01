@@ -6,10 +6,12 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,38 +40,46 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Favorites extends AppCompatActivity {
+public class Favorites extends Activity {
 LinearLayout area ;
 TextView sentence, wholeText;
 ImageView close;
     CheckBox fav; // زر الاعجاب
     ImageView share; // زر المشاركة
-    TextView textView, a,b; // بنحط العبارة في هالتكست فيو
+    TextView textView, a,b, title; // بنحط العبارة في هالتكست فيو
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorites);
-
-
-
+        final ListView listView = (ListView) findViewById(R.id.list_view);
         area = findViewById(R.id.area);
         area.setVisibility(View.INVISIBLE);
-
         sentence= findViewById(R.id.sentence);
+        title = findViewById(R.id.title);
+        //textView = findViewById(R.id.textView);
 
-
+        title.setText("Favorites");
         close= findViewById(R.id.close);
+        final DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        SharedPreferences prefs = getSharedPreferences("bgColour", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        int colorprefs = prefs.getInt("color", 1);
+        int txtprefs = prefs.getInt("txt", 1);
+        title.setTextColor(txtprefs);
+
+        sentence.setTextColor(txtprefs);
+        drawer.setBackgroundColor(colorprefs);
+
+
+
 
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("users/" + user.getUid() + "/favorites");
 
-
-
-
         if (user != null) {
 
-            //  ref.child("users").child(user.getUid()).child("favorites");
             ref.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -81,8 +91,7 @@ ImageView close;
                         list.add(new Fav(sentence));
                     }
 
-                    final ListView listView = (ListView) findViewById(R.id.list_view);
-                    FavAdapter mAdapter= new FavAdapter(Favorites.this,list);
+                     FavAdapter mAdapter= new FavAdapter(Favorites.this,list);
 
                     listView.setAdapter(mAdapter);
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
@@ -93,17 +102,10 @@ ImageView close;
                             area.setVisibility(View.VISIBLE);
                             listView.setVisibility(View.INVISIBLE);
 
-                            Fav word = list.get(i);
-                            String s=word.getSentence();
-                            Object o=  adapterView.getSelectedItem();
-
-                            TextView t = findViewById(R.id.wholetext);
-                            // Display the selected item text on TextView
+                            Fav f = list.get(i);
+                            String s=f.getSentence();
                             sentence.setText(s);
-
-
-
-      }
+                        }
                     });
 
                     close.setOnClickListener(new View.OnClickListener() {
@@ -124,7 +126,9 @@ ImageView close;
             });
         }
 
-        final DrawerLayout drawer = findViewById(R.id.drawer_layout);
+
+
+
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.bringToFront();
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -186,7 +190,10 @@ ImageView close;
 
                         break;
 
-                }
+                  case R.id.settings:
+                intent = new Intent(getApplicationContext(), SettingsActivity.class);
+                startActivity(intent);
+            }
                 //This is for maintaining the behavior of the Navigation view
                 //This is for closing the drawer after acting on it
                 drawer.closeDrawer(GravityCompat.START);

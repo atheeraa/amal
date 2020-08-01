@@ -5,8 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -32,7 +34,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
-public class Sign extends AppCompatActivity {
+public class Sign extends Activity {
 
     public Integer REQUEST_EXIT = 9;
     public FirebaseAuth mAuth;
@@ -49,6 +51,14 @@ public class Sign extends AppCompatActivity {
         setContentView(R.layout.sign);
         ref = FirebaseDatabase.getInstance().getReference();
         final DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        SharedPreferences prefs = getSharedPreferences("bgColour", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        int colorprefs = prefs.getInt("color", 1);
+        Log.v("1", "coloorrr"+ colorprefs);
+
+
+        drawer.setBackgroundColor(colorprefs);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.bringToFront();
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -109,6 +119,9 @@ public class Sign extends AppCompatActivity {
 
 
                         break;
+                    case R.id.settings:
+                        intent = new Intent(getApplicationContext(), SettingsActivity.class);
+                        startActivity(intent);
 
                 }
                 //This is for maintaining the behavior of the Navigation view

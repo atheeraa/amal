@@ -1,17 +1,25 @@
 package com.kku.amal;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,16 +37,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends Activity {
 
 
     LinearLayout area; //تحتوي على العبارة و الازرار الصغار اللي تحت
     RelativeLayout holder;// علامة الرسالة اللي أول ما نفتح الأبلكيشن
     CheckBox fav; // زر الاعجاب
-    ImageView share; // زر المشاركة
+    ImageView share, collection; // زر المشاركة
     String Select; // راح نحفظ فيها العبارة اللي بنختارها بشكل عشوائي من العبارات اللي بنجيبها من فايربيس
     List<String> list; // لستة العبارات اللي بنجيبها من فايربيس
-    TextView textView; // بنحط العبارة في هالتكست فيو
+    TextView textView,empty; // بنحط العبارة في هالتكست فيو
+
+    final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    final FirebaseDatabase database = FirebaseDatabase.getInstance();
 
 
     @Override
@@ -49,7 +60,11 @@ public class MainActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_main);
         // التكستفيو اللي راح نحط فيه العبارة
         textView = findViewById(R.id.sentence);
+        empty = findViewById(R.id.empty);
+        empty.setVisibility(View.INVISIBLE);
 
+        final ListView listView = (ListView) findViewById(R.id.collections_list);
+        listView.setVisibility(View.INVISIBLE);
 
         // the drawer الدرور اللي نسحبه من جنب
         // قاعدين نربطه بالدرور اللي في ملف ال xml
@@ -58,6 +73,22 @@ public class MainActivity extends AppCompatActivity  {
         // فلازم أولاً يسجل دخول
         final  DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+      /*  SharedPreferences prefs = getSharedPreferences("bgColour", MODE_PRIVATE);
+        final SharedPreferences.Editor editor = prefs.edit();
+
+        int color= prefs.getInt("color", 000000);
+        drawer.setBackgroundColor(color);
+
+*/
+        SharedPreferences prefs = getSharedPreferences("bgColour", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        int colorprefs = prefs.getInt("color", 1);
+         int txtprefs = prefs.getInt("txt", 1);
+        textView.setTextColor(txtprefs);
+       drawer.setBackgroundColor(colorprefs);
+
+
         //قاعدين نقول لشاشة التنقل هذي تكون الأولى على الواجهة
         navigationView.bringToFront();
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -68,7 +99,6 @@ public class MainActivity extends AppCompatActivity  {
                 // الانتنت بنستعمله للتنقل ما بين الاكتفتيز
                 Intent intent;
                 // قاعدين نستعمل خدمة ال authentication  من فايربيس، عشان نعرف مين اليوزر المسجل حالياً
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                 // الحين بنبدأ نحدد وش يصير لما ينضغط كل شيء في المنيو، عناصر المنيو هذي بتلقونها في مجلد المنيو، ملف drawer_menu
                  switch (id) {
@@ -131,7 +161,9 @@ public class MainActivity extends AppCompatActivity  {
 
                         }
                         break;
-
+                     case R.id.settings:
+                         intent = new Intent(MainActivity.this, SettingsActivity.class);
+                         startActivity(intent);
                 }
 
                 // هنا عشان نقفل الدرور لما خلاص ينضغط ويسوي مهمته
@@ -161,8 +193,7 @@ public class MainActivity extends AppCompatActivity  {
 
         /// Ref to access sentences
         // هنا نسوي رفرنس، عشان ننادي الديتابيس الي في فايربيس
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        // الديتابيس تحتوي على عنصر رئيسي سميته sentences  فقاعدين ننادي البيانات اللي تقع في هالمسار
+         // الديتابيس تحتوي على عنصر رئيسي سميته sentences  فقاعدين ننادي البيانات اللي تقع في هالمسار
         DatabaseReference ref = database.getReference("sentences");
 
         ref.addValueEventListener(new ValueEventListener() {
@@ -228,7 +259,7 @@ public class MainActivity extends AppCompatActivity  {
 
 
                     // التوست هي التنبيهات الصغييرة اللي تطلع لليوزر تحت، هنا بس قلنا له أوكي أضفناها
-                    Toast.makeText(MainActivity.this, "added"+textView.getText(),
+                    Toast.makeText(MainActivity.this, "Added to your favorites",
                             Toast.LENGTH_SHORT).show();
                 }
                     // هنا لو اليوزر مو مسجل! نقول له سجل أولاً عزيزي
@@ -272,22 +303,81 @@ public class MainActivity extends AppCompatActivity  {
         });
 
 
-        // الكولكشينز للآن ما سويتها
-        // let's do it together
 
-
-        /*
-        collection = findViewById(R.id.fav);
+        collection = findViewById(R.id.collection);
         collection.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
+
+                final DatabaseReference reff = database.getReference("users/" + user.getUid() + "/collections/");
+                area.setVisibility(View.INVISIBLE);
+                listView.setVisibility(View.VISIBLE);
+                if (user != null) {
+                    reff.addValueEventListener(new ValueEventListener() {
+
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                            final ArrayList<Collections> list = new ArrayList<>();
+
+                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                String collection = (String) ds.getKey();
+                                list.add(new Collections(collection));
+                            }
+                            if (list.isEmpty()){
+                                empty.setText("You don't have any collections");
+                                empty.setVisibility(View.VISIBLE);
+                            }
+
+
+                            CollectionsAdapter mAdapter = new CollectionsAdapter(MainActivity.this, list);
+
+                            listView.setAdapter(mAdapter);
+                            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                                @Override
+                                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                                    Collections c = list.get(i);
+                                    final String s = c.getCollection();
+                                    if (user != null) {
+
+                                        reff.child(s).child("sentences").child(user.getUid().substring(0,3)+textView.getText().subSequence(0,3)).setValue(textView.getText());
+                                        Toast.makeText(getApplicationContext(), "Added to "+s,
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+
+                                }
+                            });
+
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+
+                    });
+                }}});}}
+
+                /*
+                  ColorPickerView c = findViewById(R.id.color_picker_view);
+        c.addOnColorSelectedListener(new OnColorSelectedListener() {
+            @Override
+            public void onColorSelected(int selectedColor) {
+                drawer.setBackgroundColor(selectedColor);
+                Log.v("1", "onclick" + selectedColor);
+               SharedPreferences prefs = getSharedPreferences("bgColour", MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+
+                editor.putInt("color", selectedColor);
+                editor.apply();
+                int colorprefs = prefs.getInt("color", selectedColor);
 
 
             }
-        });*/
+        });
 
 
-    }
-
-}
+                 */

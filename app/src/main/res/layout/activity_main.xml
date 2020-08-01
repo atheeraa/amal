@@ -5,7 +5,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="#D24E9F3D"
     android:fitsSystemWindows="true"
     tools:context=".MainActivity"
     tools:openDrawer="start">
@@ -13,12 +13,10 @@
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="fill_parent"
         android:layout_gravity="start"
 
-        android:layout_marginTop="50dp"
         android:background="@android:color/transparent"
-        android:fitsSystemWindows="true"
         app:elevation="0dp"
         app:headerLayout="@layout/nav_header_main"
         app:itemBackground="@color/ti"
@@ -35,6 +33,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:layout_centerInParent="true"
+            android:id="@+id/empty"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="150dp"
+            android:layout_marginRight="8dp"
+            android:shadowColor="@color/bg"
+            android:textColor="@android:color/white"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/curs"/>
 
         <ImageView
             android:id="@+id/whiteScreen"
@@ -52,11 +64,13 @@
             android:layout_centerInParent="true">
 
             <ImageView
+                android:layout_width="100dp"
+
                 android:id="@+id/starter"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_height="100dp"
                 android:layout_centerInParent="true"
-                android:src="@drawable/mail" />
+                android:src="@drawable/logo" />
+
         </RelativeLayout>
 
         <LinearLayout
@@ -89,15 +103,15 @@
                 android:layout_weight="1"
                 android:orientation="horizontal"
                 android:paddingLeft="16dp"
-                android:paddingTop="16dp"
-                android:paddingRight="16dp"
-                android:paddingBottom="16dp">
+                android:paddingTop="8dp"
+                android:paddingRight="16dp">
 
                 <CheckBox
                     android:id="@+id/fav"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginEnd="50dp"
+                    android:paddingBottom="16dp"
                     android:layout_marginRight="50dp"
                     android:button="@drawable/favcheckbox"
                     android:checked="false"
@@ -121,6 +135,13 @@
 
         </LinearLayout>
 
-
+        <ListView
+            android:id="@+id/collections_list"
+            android:layout_width="320dp"
+            android:layout_height="500dp"
+            android:layout_centerInParent="true"
+            android:clickable="true"
+            android:descendantFocusability="blocksDescendants"
+            android:focusable="true" />
     </RelativeLayout>
 </androidx.drawerlayout.widget.DrawerLayout>
