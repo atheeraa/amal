@@ -18,10 +18,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.airbnb.android:lottie:3.4.0'
+    compile 'com.eightbitlab:bottomnavigationbar:0.9.6'
     implementation 'com.xw.repo:bubbleseekbar:3.20'
     compile 'com.jpardogo.materialtabstrip:library:1.1.1'
     implementation 'androidx.appcompat:appcompat:1.1.0'

@@ -7,37 +7,27 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.kku.amal.ui.home.HomeFragment"
-        android:label="@string/menu_home"
+        android:name="com.kku.amal.Home"
         tools:layout="@layout/fragment_home" />
-
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.kku.amal.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
-
+        android:id="@+id/nav_favorites"
+        android:name="com.kku.amal.FavoritesFragment"
+        tools:layout="@layout/fragment_favorites" />
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.kku.amal.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
-
+        android:id="@+id/nav_account"
+        android:name="com.kku.amal.AccountFragment"
+        tools:layout="@layout/fragment_account" />
     <fragment
-        android:id="@+id/nav_tools"
-        android:name="com.kku.amal.ui.tools.ToolsFragment"
-        android:label="@string/menu_tools"
-        tools:layout="@layout/fragment_tools" />
-
+        android:id="@+id/nav_settings"
+        android:name="com.kku.amal.SettingsFragment"
+        tools:layout="@layout/fragment_settings" />
     <fragment
-        android:id="@+id/nav_share"
-        android:name="com.kku.amal.ui.share.ShareFragment"
-        android:label="@string/menu_share"
-        tools:layout="@layout/fragment_share" />
+        android:id="@+id/nav_collections"
+        android:name="com.kku.amal.CollectionsFragment"
+        tools:layout="@layout/fragment_collections" />
 
-    <fragment
-        android:id="@+id/nav_send"
-        android:name="com.kku.amal.ui.send.SendFragment"
-        android:label="@string/menu_send"
-        tools:layout="@layout/fragment_send" />
+
+
+
+
 </navigation>

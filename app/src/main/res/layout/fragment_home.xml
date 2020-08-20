@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ti"
+    android:fitsSystemWindows="true"
+    tools:context=".Home"
+    tools:openDrawer="start">
+
+
+    <RelativeLayout
+        android:id="@+id/bgs"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/holder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true">
+
+            <ImageView
+                android:id="@+id/sunlogo"
+                android:layout_width="80dp"
+                android:layout_height="160dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/sunlogo" />
+
+            <ImageView
+                android:id="@+id/cloudlogo"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/cloudlogo" />
+
+            <TextView
+                android:id="@+id/logotext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cloudlogo"
+                android:layout_centerInParent="true"
+                android:fontFamily="@font/cairo"
+                android:text="دَفْعَة"
+                android:textColor="#FFFFFF"
+                android:textSize="26sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/area"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible">
+
+            <ImageView
+                android:id="@+id/screen"
+                android:layout_width="300dp"
+                android:layout_height="400dp"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:alpha="0.3"
+                android:background="@drawable/rounded" />
+
+
+            <TextView
+                android:id="@+id/sentence"
+                android:layout_width="300dp"
+                android:layout_height="350dp"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="115dp"
+                android:layout_marginRight="8dp"
+                android:fontFamily="@font/cairo"
+                android:paddingLeft="10dp"
+                android:paddingTop="16dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="16dp"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:textSize="21sp" />
+
+            <RelativeLayout
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:layout_below="@id/sentence"
+                android:layout_alignEnd="@id/sentence"
+                android:layout_alignRight="@id/sentence">
+
+                <LinearLayout
+                    android:id="@+id/buttons"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="bottom|center"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/fav"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="30dp"
+                        android:layout_marginRight="30dp"
+                        android:button="@drawable/favcheckbox"
+                        android:checked="false"
+                        android:stateListAnimator="@anim/favanimate" />
+
+                    <ImageView
+                        android:id="@+id/collection"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="35dp"
+                        android:layout_marginRight="40dp"
+                        android:src="@drawable/mark" />
+
+                    <ImageView
+                        android:id="@+id/share"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/share" />
+                </LinearLayout>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <ListView
+            android:id="@+id/collections_list"
+            android:layout_width="320dp"
+            android:layout_height="500dp"
+            android:layout_centerInParent="true"
+            android:clickable="true"
+            android:descendantFocusability="blocksDescendants"
+            android:focusable="true"
+            android:visibility="invisible" />
+    </RelativeLayout>
+
+
+</FrameLayout>
+

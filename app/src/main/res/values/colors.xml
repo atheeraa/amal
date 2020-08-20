@@ -1,9 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="bg">#664E1E1E</color>
-    <color name="ti">#7AFFFFFF</color>
+    <color name="ti">#8a96fa</color>
     <color name="background">#D24E9F3D</color>
+    <array name="rainbow">
+        <item>#3BE394F1</item>
+        <item>#3B7FBBCD</item>
+        <item>#3BF68585</item>
+        <item>#3BFAE494</item>
+        <item>#3B7BF495</item>
+        <item>#3BFF9292</item>
+        <item>#3B198A46</item>
+        <item>#3BF38EB0</item>
+
+
+
+    </array>
 </resources>

@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+        <item android:id="@+id/nav_home"
+            android:title="Home"
+            android:icon="@drawable/home"
+            />
+        <item
+            android:id="@+id/nav_favorites"
+            android:title="Favorites"
+            android:icon="@drawable/favo"/>
+        <item
+            android:id="@+id/nav_collections"
+            android:title="Collections"
+            android:icon="@drawable/collections"/>
+
+        <item android:id="@+id/nav_account"
+            android:title="My Account"
+            android:icon="@drawable/account"/>
+
+        <item android:id="@+id/nav_settings"
+            android:title="Settings"
+            android:icon="@drawable/settings"/>
+</menu>
