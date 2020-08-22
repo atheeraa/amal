@@ -12,9 +12,11 @@
     <RelativeLayout
         android:id="@+id/bgs"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
 
         <RelativeLayout
+            android:background="@color/ti"
             android:id="@+id/holder"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -93,7 +95,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="bottom|center"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:paddingLeft="30dp"
+                    android:paddingStart="30dp">
 
                     <CheckBox
                         android:id="@+id/fav"
@@ -101,10 +105,12 @@
                         android:layout_height="30dp"
                         android:layout_gravity="center"
                         android:layout_marginEnd="30dp"
+
                         android:layout_marginRight="30dp"
                         android:button="@drawable/favcheckbox"
                         android:checked="false"
-                        android:stateListAnimator="@anim/favanimate" />
+                        android:stateListAnimator="@anim/favanimate"
+                        />
 
                     <ImageView
                         android:id="@+id/collection"
@@ -127,15 +133,46 @@
 
         </RelativeLayout>
 
-        <ListView
-            android:id="@+id/collections_list"
-            android:layout_width="320dp"
-            android:layout_height="500dp"
-            android:layout_centerInParent="true"
-            android:clickable="true"
-            android:descendantFocusability="blocksDescendants"
-            android:focusable="true"
-            android:visibility="invisible" />
+        <RelativeLayout
+
+            android:id="@+id/noconnection"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible"
+            >
+
+            <ImageView
+
+                android:layout_width="300dp"
+                android:layout_height="400dp"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:alpha="0.3"
+                android:background="@drawable/rounded" />
+
+
+            <TextView
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="115dp"
+                android:layout_marginRight="8dp"
+                android:fontFamily="@font/cairo"
+                android:paddingLeft="10dp"
+                android:paddingTop="16dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="16dp"
+                android:text="الجهاز غير متصل بالانترنت، الرجاء المحاولة مرة أخرى"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:textSize="21sp" />
+
+
+        </RelativeLayout>
+
+
     </RelativeLayout>
 
 

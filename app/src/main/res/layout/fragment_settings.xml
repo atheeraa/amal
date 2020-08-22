@@ -61,7 +61,7 @@
                 android:fontFamily="@font/cairo"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
-                android:text="أي من اللغات التالية"
+                android:text="أي من اللغات التالية تفضل؟"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp" />
 
