@@ -56,7 +56,14 @@ public class FavAdapter extends ArrayAdapter<Fav> {
         whole.setText(sentence.getSentence());
         whole.setVisibility(View.GONE);
 
-        String substring = sentence.getSentence().substring(0, 25) + " ... ";
+        int length = sentence.getSentence().length();
+        String substring="";
+        if(length<20)
+            substring=sentence.getSentence()+ " ... ";
+        else
+        substring=sentence.getSentence().substring(0,20)+ " ... ";
+
+
         TextView sentenceTV = (TextView) convertView.findViewById(R.id.favsentence);
         sentenceTV.setText(substring);
 

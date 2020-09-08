@@ -10,9 +10,11 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -27,7 +29,8 @@ import com.google.firebase.database.FirebaseDatabase;
  */
 public class SettingsFragment extends Fragment {
     RelativeLayout title;
-    CheckBox ar, en;
+    LinearLayout freq;
+    CheckBox ar, en, sendNotification;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -67,7 +70,7 @@ public class SettingsFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         SharedPreferences prefs = getActivity().getSharedPreferences("lang", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
+        SharedPreferences nprefs = getActivity().getSharedPreferences("notification", Context.MODE_PRIVATE);
 
     }
 
@@ -75,39 +78,87 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
-        title= view.findViewById(R.id.title);
+
+        SharedPreferences prefs = getActivity().getSharedPreferences("lang", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        int arpref = prefs.getInt("ar", 1);
+        int enpref = prefs.getInt("en", 1);
+
+        SharedPreferences notification = getActivity().getSharedPreferences("notification", Context.MODE_PRIVATE);
+        SharedPreferences.Editor neditor = notification.edit();
+
+
+        int onoffpref = notification.getInt("on/off", 1);
+        int freqpref = notification.getInt("freq", 1);
+
+
+        freq = view.findViewById(R.id.freq);
+
+        title = view.findViewById(R.id.title);
         title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int reqCode = 1;
-                 NotificationUtil. showNotification(getContext(), "Title", "This is the message to display", reqCode);
+                NotificationUtil.showNotification(getContext(), "Title", reqCode);
 
             }
         });
         Spinner spinner = view.findViewById(R.id.reps);
-         int  nums []={1,2,3};
+        freq.setVisibility(View.INVISIBLE);
+
+        int nums[] = {1, 2, 3};
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-               R.array.reps, android.R.layout.simple_spinner_item);
+                R.array.reps, android.R.layout.simple_spinner_item);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+        spinner.setSelection(freqpref - 1);
 
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                Object item = parent.getItemAtPosition(pos);
+                int value = Integer.valueOf(item.toString());
+                neditor.putInt("freq", value);
+                neditor.apply();
 
-        SharedPreferences prefs = getActivity().getSharedPreferences("lang", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        int arpref = prefs.getInt("ar", 1);
-        int enpref = prefs.getInt("en", 1);
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
 
         ar = view.findViewById(R.id.favarabic);
         en = view.findViewById(R.id.favenglish);
+        sendNotification = view.findViewById(R.id.sendnotifCB);
+
         ar.setChecked(true);
         en.setChecked(true);
+        sendNotification.setChecked(true);
 
-        if (arpref==0){
+        if (arpref == 0) {
             ar.setChecked(false);
         }
-        if (enpref==0){
+        if (enpref == 0) {
             en.setChecked(false);
+        }
+        if (onoffpref == 1) {
+            freq.setVisibility(View.VISIBLE);
+        } else if (onoffpref == 0) {
+            freq.setVisibility(View.INVISIBLE);
+        }
+        if (onoffpref == 0) {
+            sendNotification.setChecked(false);
+            Toast.makeText(getContext(), "off",
+                    Toast.LENGTH_SHORT).show();
+
+
+        } else {
+            Toast.makeText(getContext(), "on",
+                    Toast.LENGTH_SHORT).show();
+
+
         }
 
         ar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -118,15 +169,14 @@ public class SettingsFragment extends Fragment {
 
                 if (ar.isChecked()) {
                     editor.putInt("ar", 1);
-                } else if(!ar.isChecked() && !en.isChecked()) {
+                } else if (!ar.isChecked() && !en.isChecked()) {
 
                     Toast.makeText(getContext(), "يجب اختيار لغة واحدة على الأقل",
                             Toast.LENGTH_SHORT).show();
                     ar.setChecked(true);
                     en.setChecked(true);
 
-                }
-                else {
+                } else {
                     editor.putInt("ar", 0);
                 }
                 editor.apply();
@@ -141,21 +191,40 @@ public class SettingsFragment extends Fragment {
             public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
                 if (en.isChecked()) {
                     editor.putInt("en", 1);
-                } else if(!ar.isChecked() && !en.isChecked()) {
+                } else if (!ar.isChecked() && !en.isChecked()) {
 
                     Toast.makeText(getContext(), "يجب اختيار لغة واحدة على الأقل",
                             Toast.LENGTH_SHORT).show();
                     ar.setChecked(true);
                     en.setChecked(true);
 
-                }
-                else {
+                } else {
                     editor.putInt("en", 0);
                 }
                 editor.apply();
 
             }
         });
+        sendNotification.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+
+            public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
+                if (sendNotification.isChecked()) {
+                    freq.setVisibility(View.VISIBLE);
+                    neditor.putInt("on/off", 1);
+
+                } else {
+                    freq.setVisibility(View.INVISIBLE);
+                    neditor.putInt("on/off", 0);
+                }
+                neditor.apply();
+
+            }
+
+        });
+
+
         return view;
     }
 

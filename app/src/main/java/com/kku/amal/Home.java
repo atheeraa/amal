@@ -7,8 +7,12 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.work.BackoffPolicy;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import android.os.Handler;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +26,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -36,9 +41,10 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class Home extends Fragment {
-
+    SpinKitView progress;
     RelativeLayout area;
     CheckBox fav; // زر الاعجاب
     ImageView share, collection; // زر المشاركة
@@ -92,6 +98,7 @@ public class Home extends Fragment {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceType) {
+
         super.onActivityCreated(savedInstanceType);
     }
 
@@ -100,12 +107,24 @@ public class Home extends Fragment {
                              Bundle savedInstanceState) {
         // نربط هالملف بالواجهة ال xml
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        SharedPreferences notification = getContext().getSharedPreferences("notification", Context.MODE_PRIVATE);
+
+
+        // عشان نشوف وش يبغى اليوزر لغة عربي أو انقلش؟
+        SharedPreferences prefs = getActivity().getSharedPreferences("lang", Context.MODE_PRIVATE);
+        int arpref = prefs.getInt("ar", 1);
+        int enpref = prefs.getInt("en", 1);
+
+        int npref = notification.getInt("on/off", 1);
+        int freqpref = notification.getInt("freq", 1);
 
         //ننادي الlayouts اللي في الواجهة
         //واجهة تظهر لما مافيه انترنت
         RelativeLayout noconnection = view.findViewById(R.id.noconnection);
         // الواجهة اللي فيها العبارة
         RelativeLayout bg = view.findViewById(R.id.holder);
+        progress = view.findViewById(R.id.progress);
+
 
         // عشان نؤخر عمل الانميشن شوي إلى أن يظهر اللوقو لليوزر لمدة ثانيتين
         new Handler().postDelayed(new Runnable() {
@@ -113,6 +132,13 @@ public class Home extends Fragment {
             public void run() {
 
                 logo(bg);
+            }
+        }, 2000);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                progress.setVisibility(View.VISIBLE);
             }
         }, 2000);
 
@@ -144,17 +170,25 @@ public class Home extends Fragment {
                         // صفحة انه مافيه انترنت نبغى تختفي
                         noconnection.setVisibility(View.INVISIBLE);
 
-                        // عشان نشوف وش يبغى اليوزر لغة عربي أو انقلش؟
-                        SharedPreferences prefs = getActivity().getSharedPreferences("lang", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = prefs.edit();
-                        int arpref = prefs.getInt("ar", 1);
-                        int enpref = prefs.getInt("en", 1);
+                        if(npref==1) {
+                            Toast.makeText(getContext(), "on",
+                                    Toast.LENGTH_SHORT).show();
+
+                            startNotification();
+                        }
+                        else{
+                            Toast.makeText(getContext(), "off",
+                                    Toast.LENGTH_SHORT).show();
+
+                        }
+
 
                         // العبارة اللي بتظهر للمستخدم
                         sentencehome = view.findViewById(R.id.sentence);
-                        // المربع اللي يحمل العبارة والأزرار اللي تحتها
+                         // المربع اللي يحمل العبارة والأزرار اللي تحتها
                         area = view.findViewById(R.id.area);
                         area.setVisibility(View.VISIBLE);
+                        sentencehome.setMovementMethod(new ScrollingMovementMethod());
 
 
                         // إذا اليوزر يبغى عبارات عربي و انقلش
@@ -180,6 +214,9 @@ public class Home extends Fragment {
 
                                             // أضف العبارات للست
                                             list.add(sentence);
+                                            if (!list.isEmpty()) {
+                                                progress.setVisibility(View.INVISIBLE);
+                                            }
                                         }
                                     }
                                     // هنا بنشوف اللست كاملة وراح نستعمل كلاس random  عشان نختار أحد العناصر اللي في
@@ -225,6 +262,9 @@ public class Home extends Fragment {
                                         String sentence = ds.getValue(String.class);
                                         // أضف العبارات للست
                                         list.add(sentence);
+                                        if (!list.isEmpty()) {
+                                            progress.setVisibility(View.INVISIBLE);
+                                        }
 
                                     }
                                     // هنا بنشوف اللست كاملة وراح نستعمل كلاس random  عشان نختار أحد العناصر اللي في
@@ -270,7 +310,9 @@ public class Home extends Fragment {
                                         String sentence = ds.getValue(String.class);
                                         // أضف العبارات للست
                                         list.add(sentence);
-
+                                        if (!list.isEmpty()) {
+                                            progress.setVisibility(View.INVISIBLE);
+                                        }
                                     }
                                     // هنا بنشوف اللست كاملة وراح نستعمل كلاس random  عشان نختار أحد العناصر اللي في
                                     // اللست بشكل عشوائي
@@ -315,16 +357,19 @@ public class Home extends Fragment {
                                 if (fav.isChecked()) {
                                     // هل اليوزر مسجل؟
                                     if (user != null) {
-                                        // إذا ايه إذن اصنع له قائمة مفضلة، تندرج تحت اليوزر حقه
-                                        ref.child("users").child(user.getUid()).child("favorites")
-                                                //بأشرح لكم في فيديو اش يعني السطرين التاليين
-                                                .child(user.getUid() + sentencehome.getText().subSequence(0, 3))
-                                                .setValue(sentencehome.getText());
+
+                                        if (!sentencehome.getText().equals("")) {
+                                            // إذا ايه إذن اصنع له قائمة مفضلة، تندرج تحت اليوزر حقه
+                                            ref.child("users").child(user.getUid()).child("favorites")
+                                                    //بأشرح لكم في فيديو اش يعني السطرين التاليين
+                                                    .child(user.getUid() + sentencehome.getText().subSequence(0, 3))
+                                                    .setValue(sentencehome.getText().toString());
 
 
-                                        // التوست هي التنبيهات الصغييرة اللي تطلع لليوزر تحت، هنا بس قلنا له أوكي أضفناها
-                                        Toast.makeText(getContext(), "تمت إضافتها لمفضلتك",
-                                                Toast.LENGTH_SHORT).show();
+                                            // التوست هي التنبيهات الصغييرة اللي تطلع لليوزر تحت، هنا بس قلنا له أوكي أضفناها
+                                            Toast.makeText(getContext(), "تمت إضافتها لمفضلتك",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
                                     }
                                     // هنا لو اليوزر مو مسجل! نقول له سجل أولاً عزيزي
                                     else {
@@ -387,5 +432,42 @@ public class Home extends Fragment {
         bg.setVisibility(View.INVISIBLE);
     }
 
+
+
+    private void startNotification() {
+        SharedPreferences notification = getContext().getSharedPreferences("notification", Context.MODE_PRIVATE);
+        int freqpref = notification.getInt("freq", 1);
+        int repeat =24;
+        int flex = 15;
+
+
+        switch (freqpref){
+            case 2 :
+                repeat=12;
+                break;
+            case 3:
+                repeat=6;
+                break;
+            case 4 :
+                repeat=3;
+                break;
+            }
+        Toast.makeText(getContext(), "freq"+freqpref+"repeat"+repeat,
+                Toast.LENGTH_LONG).show();
+
+        PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(
+                NotificationWorker.class,
+                repeat, //long repeatInterval,
+                TimeUnit.HOURS, // TimeUnit repeatIntervalTimeUnit,
+                flex,//   long flexInterval,
+                TimeUnit.MINUTES)
+                .setInitialDelay(5,TimeUnit.MINUTES)
+                .setBackoffCriteria(BackoffPolicy.LINEAR, 1, TimeUnit.HOURS)
+                .build();
+        WorkManager workManager = WorkManager.getInstance();
+        workManager.enqueue(periodicWorkRequest);
+
+
+    }
 }
 

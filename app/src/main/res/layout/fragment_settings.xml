@@ -149,7 +149,7 @@
                 android:fontFamily="@font/cairo"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
-                android:text="هل تود أن يرسل لك التطبيق عبارات عشوائية؟"
+                android:text="هل تود أن يرسل لك التطبيق عبارات عشوائية خلال اليوم؟"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp" />
 
@@ -194,6 +194,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/sendnotifCB"
                 android:focusable="false"
+               android:id="@+id/freq"
+                android:visibility="invisible"
                 android:orientation="horizontal">
                 <Spinner
 
