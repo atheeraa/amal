@@ -8,12 +8,14 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.work.BackoffPolicy;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
 import android.os.Handler;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +53,7 @@ public class Home extends Fragment {
     String Select; // راح نحفظ فيها العبارة اللي بنختارها بشكل عشوائي من العبارات اللي بنجيبها من فايربيس
     List<String> list; // لستة العبارات اللي بنجيبها من فايربيس
     TextView sentencehome, empty; // بنحط العبارة في هالتكست فيو
-
+    private boolean isFirstAnimation = false;
     final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
 
@@ -108,8 +110,6 @@ public class Home extends Fragment {
         // نربط هالملف بالواجهة ال xml
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         SharedPreferences notification = getContext().getSharedPreferences("notification", Context.MODE_PRIVATE);
-
-
         // عشان نشوف وش يبغى اليوزر لغة عربي أو انقلش؟
         SharedPreferences prefs = getActivity().getSharedPreferences("lang", Context.MODE_PRIVATE);
         int arpref = prefs.getInt("ar", 1);
@@ -121,9 +121,17 @@ public class Home extends Fragment {
         //ننادي الlayouts اللي في الواجهة
         //واجهة تظهر لما مافيه انترنت
         RelativeLayout noconnection = view.findViewById(R.id.noconnection);
+        noconnection.setVisibility(View.INVISIBLE);
+
         // الواجهة اللي فيها العبارة
         RelativeLayout bg = view.findViewById(R.id.holder);
+        ImageView logo = view.findViewById(R.id.logo);
+        TextView logotext = view.findViewById(R.id.logotext);
         progress = view.findViewById(R.id.progress);
+        // العبارة اللي بتظهر للمستخدم
+        sentencehome = view.findViewById(R.id.sentence);
+        // المربع اللي يحمل العبارة والأزرار اللي تحتها
+        area = view.findViewById(R.id.area);
 
 
         // عشان نؤخر عمل الانميشن شوي إلى أن يظهر اللوقو لليوزر لمدة ثانيتين
@@ -131,7 +139,7 @@ public class Home extends Fragment {
             @Override
             public void run() {
 
-                logo(bg);
+                logo(bg, area);
             }
         }, 2000);
         new Handler().postDelayed(new Runnable() {
@@ -155,7 +163,7 @@ public class Home extends Fragment {
                         noconnection.setVisibility(View.VISIBLE);
 
                     }
-                }, 1000);
+                }, 3000);
 
             }
             //إذا فيه انترنت
@@ -170,23 +178,7 @@ public class Home extends Fragment {
                         // صفحة انه مافيه انترنت نبغى تختفي
                         noconnection.setVisibility(View.INVISIBLE);
 
-                        if(npref==1) {
-                            Toast.makeText(getContext(), "on",
-                                    Toast.LENGTH_SHORT).show();
 
-                            startNotification();
-                        }
-                        else{
-                            Toast.makeText(getContext(), "off",
-                                    Toast.LENGTH_SHORT).show();
-
-                        }
-
-
-                        // العبارة اللي بتظهر للمستخدم
-                        sentencehome = view.findViewById(R.id.sentence);
-                         // المربع اللي يحمل العبارة والأزرار اللي تحتها
-                        area = view.findViewById(R.id.area);
                         area.setVisibility(View.VISIBLE);
                         sentencehome.setMovementMethod(new ScrollingMovementMethod());
 
@@ -371,7 +363,6 @@ public class Home extends Fragment {
                                                     Toast.LENGTH_SHORT).show();
                                         }
                                     }
-                                    // هنا لو اليوزر مو مسجل! نقول له سجل أولاً عزيزي
                                     else {
                                         fav.setChecked(false);
                                         Toast.makeText(getContext(), "لإضافة العبارة للمفضلة يجب أن تسجل دخولك",
@@ -426,48 +417,16 @@ public class Home extends Fragment {
 
     // فنكشن الانميشن
 
-    void logo(View bg) {
-        Animation bgfade = AnimationUtils.loadAnimation(getContext(), R.anim.bgfade);
-        bg.startAnimation(bgfade);
-        bg.setVisibility(View.INVISIBLE);
-    }
+    void logo(View logo, View area) {
+        final Animation translateScale = AnimationUtils.loadAnimation(getActivity(), R.anim.translate_scale);
+        logo.startAnimation(translateScale);
+        translateScale.setFillAfter(true);
 
-
-
-    private void startNotification() {
-        SharedPreferences notification = getContext().getSharedPreferences("notification", Context.MODE_PRIVATE);
-        int freqpref = notification.getInt("freq", 1);
-        int repeat =24;
-        int flex = 15;
-
-
-        switch (freqpref){
-            case 2 :
-                repeat=12;
-                break;
-            case 3:
-                repeat=6;
-                break;
-            case 4 :
-                repeat=3;
-                break;
-            }
-        Toast.makeText(getContext(), "freq"+freqpref+"repeat"+repeat,
-                Toast.LENGTH_LONG).show();
-
-        PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(
-                NotificationWorker.class,
-                repeat, //long repeatInterval,
-                TimeUnit.HOURS, // TimeUnit repeatIntervalTimeUnit,
-                flex,//   long flexInterval,
-                TimeUnit.MINUTES)
-                .setInitialDelay(5,TimeUnit.MINUTES)
-                .setBackoffCriteria(BackoffPolicy.LINEAR, 1, TimeUnit.HOURS)
-                .build();
-        WorkManager workManager = WorkManager.getInstance();
-        workManager.enqueue(periodicWorkRequest);
-
+        Animation animation = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_in);
+        area.startAnimation(animation);
 
     }
+
+
 }
 

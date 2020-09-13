@@ -3,24 +3,26 @@ package com.kku.amal;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.FirebaseDatabase;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,7 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
  */
 public class SettingsFragment extends Fragment {
     RelativeLayout title;
-    LinearLayout freq;
+    private static String s;
     CheckBox ar, en, sendNotification;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -74,6 +76,7 @@ public class SettingsFragment extends Fragment {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -90,43 +93,8 @@ public class SettingsFragment extends Fragment {
 
 
         int onoffpref = notification.getInt("on/off", 1);
-        int freqpref = notification.getInt("freq", 1);
-
-
-        freq = view.findViewById(R.id.freq);
 
         title = view.findViewById(R.id.title);
-        title.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int reqCode = 1;
-                NotificationUtil.showNotification(getContext(), "Title", reqCode);
-
-            }
-        });
-        Spinner spinner = view.findViewById(R.id.reps);
-        freq.setVisibility(View.INVISIBLE);
-
-        int nums[] = {1, 2, 3};
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.reps, android.R.layout.simple_spinner_item);
-
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        spinner.setSelection(freqpref - 1);
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                Object item = parent.getItemAtPosition(pos);
-                int value = Integer.valueOf(item.toString());
-                neditor.putInt("freq", value);
-                neditor.apply();
-
-            }
-
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
 
 
         ar = view.findViewById(R.id.favarabic);
@@ -143,23 +111,7 @@ public class SettingsFragment extends Fragment {
         if (enpref == 0) {
             en.setChecked(false);
         }
-        if (onoffpref == 1) {
-            freq.setVisibility(View.VISIBLE);
-        } else if (onoffpref == 0) {
-            freq.setVisibility(View.INVISIBLE);
-        }
-        if (onoffpref == 0) {
-            sendNotification.setChecked(false);
-            Toast.makeText(getContext(), "off",
-                    Toast.LENGTH_SHORT).show();
 
-
-        } else {
-            Toast.makeText(getContext(), "on",
-                    Toast.LENGTH_SHORT).show();
-
-
-        }
 
         ar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
@@ -211,11 +163,9 @@ public class SettingsFragment extends Fragment {
 
             public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
                 if (sendNotification.isChecked()) {
-                    freq.setVisibility(View.VISIBLE);
                     neditor.putInt("on/off", 1);
 
                 } else {
-                    freq.setVisibility(View.INVISIBLE);
                     neditor.putInt("on/off", 0);
                 }
                 neditor.apply();
@@ -223,11 +173,39 @@ public class SettingsFragment extends Fragment {
             }
 
         });
+        if (onoffpref == 1) {
+            startNotification(true);
+        } else if (onoffpref == 0) {
+            startNotification(false);
+            sendNotification.setChecked(false);
 
-
+        }
         return view;
     }
 
+
+    private void startNotification(boolean status) {
+        WorkManager workManager = WorkManager.getInstance();
+        if (status) {
+                    PeriodicWorkRequest workRequest = new PeriodicWorkRequest.Builder(
+                    NotificationWorker.class,
+                    1, //long repeatInterval,
+                    TimeUnit.MINUTES, // TimeUnit repeatIntervalTimeUnit,
+                    1,//   long flexInterval,
+                    TimeUnit.MINUTES)
+                    .setInitialDelay(1, TimeUnit.MILLISECONDS)
+                    .build();
+
+            workManager.enqueueUniquePeriodicWork("uniqueWorkName",
+                    ExistingPeriodicWorkPolicy.KEEP,workRequest);
+            Log.v("1", "working");
+
+
+        } else if (!status) {
+            workManager.cancelAllWork();
+            Log.v("1", "cancelled");
+        }
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceType) {
@@ -235,5 +213,6 @@ public class SettingsFragment extends Fragment {
 
 
     }
+
 
 }

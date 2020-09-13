@@ -4,44 +4,22 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-
-import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.navigation.NavigationView;
+import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -51,8 +29,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,7 +36,7 @@ import java.util.Random;
  * create an instance of this fragment.
  */
 public class FavoritesFragment extends Fragment {
-
+    SpinKitView progress;
     RelativeLayout error;
     RelativeLayout area2;
     TextView sentence, errorText;
@@ -119,10 +95,17 @@ public class FavoritesFragment extends Fragment {
         errorText = view.findViewById(R.id.errortext);
         area2 = view.findViewById(R.id.area2);
         area2.setVisibility(View.INVISIBLE);
+        progress = view.findViewById(R.id.progress);
 
         sentence = view.findViewById(R.id.fullsentence);
 
         close = view.findViewById(R.id.close);
+        progress.setVisibility(View.VISIBLE);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                progress.setVisibility(View.INVISIBLE);
 
 
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -181,6 +164,7 @@ public class FavoritesFragment extends Fragment {
 
 
         unfav = view.findViewById(R.id.unfav);
+        unfav.setChecked(true);
         unfav.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
@@ -234,6 +218,10 @@ public class FavoritesFragment extends Fragment {
 
             }
         });
+
+            }
+        }, 2000);
+
 
         return view;
     }

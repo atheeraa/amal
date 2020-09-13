@@ -44,6 +44,7 @@
             android:scaleY="1.7" />
 
 
+
         <LinearLayout
             android:id="@+id/choice"
 
@@ -55,15 +56,16 @@
             android:orientation="vertical">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="64dp"
+                android:layout_marginTop="90dp"
                 android:layout_marginRight="16dp"
                 android:fontFamily="@font/cairo"
                 android:paddingTop="8dp"
+                android:gravity="center"
                 android:paddingBottom="8dp"
-                android:text="لإضافة عبارة "
+                android:text="لإضافة عبارة تود مشاركتها مع مستخدمي التطبيق "
                 android:textColor="#FFFFFF"
                 android:textSize="16sp" />
 
@@ -80,6 +82,7 @@
                 android:textAlignment="center"
                 android:textColor="#3F51B5"
                 android:textSize="14sp" />
+
             <Button
                 android:id="@+id/send"
                 android:layout_width="wrap_content"
@@ -116,6 +119,16 @@
                 app:menu="@menu/tabs" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+        <com.github.ybq.android.spinkit.SpinKitView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/progress"
+            style="@style/SpinKitView.Pulse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:visibility="invisible"
+            app:SpinKit_Color="@color/colorPrimary" />
+
     </RelativeLayout>
 
 

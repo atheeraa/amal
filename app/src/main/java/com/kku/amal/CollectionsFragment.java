@@ -4,6 +4,8 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -74,7 +77,7 @@ public class CollectionsFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_collections, container, false);
-
+        SpinKitView progress = view.findViewById(R.id.progress);
         ref = FirebaseDatabase.getInstance().getReference();
         byuser = view.findViewById(R.id.byuser);
         send = view.findViewById(R.id.send);
@@ -86,14 +89,43 @@ public class CollectionsFragment extends Fragment {
                                     public void onClick(View view) {
                                         DatabaseReference ref = database.getReference();
                                         if (user != null) {
-                                            ref.child("UsersSentences").child(user.getUid() + byuser.getText().subSequence(0, 3)).setValue(byuser.getText().toString());
-                                        } else {
-                                            ref.child("UsersSentences").child("Anon").child("-" + byuser.getText().subSequence(0, 3)).setValue(byuser.getText().toString());
-                                        }
-                                        Toast.makeText(getContext(), "شكرًا لك، سنقوم بإضافة العبارة",
-                                                Toast.LENGTH_LONG).show();
+                                            if (byuser.getText().length() < 3) {
+                                                Toast.makeText(getContext(), "الرجاء كتابة عبارة أطول",
+                                                        Toast.LENGTH_LONG).show();
+                                            } else {
+                                                ref.child("UsersSentences").child(user.getUid() + byuser.getText().subSequence(0, 3)).setValue(byuser.getText().toString());
+                                                progress.setVisibility(View.VISIBLE);
+                                                new Handler().postDelayed(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        Toast.makeText(getContext(), "شكرًا لك، سنقوم بإضافة العبارة",
+                                                                Toast.LENGTH_LONG).show();
+                                                        progress.setVisibility(View.INVISIBLE);
+                                                        byuser.setText("");
+                                                    }
+                                                }, 2000);
 
-                                        byuser.setText("");
+                                            }
+                                        } else {
+                                            if (byuser.getText().length() < 3) {
+                                                Toast.makeText(getContext(), "الرجاء كتابة عبارة أطول",
+                                                        Toast.LENGTH_LONG).show();
+                                            } else {
+                                                ref.child("UsersSentences").child("Anon").child("-" + byuser.getText().subSequence(0, 3)).setValue(byuser.getText().toString());
+                                                progress.setVisibility(View.VISIBLE);
+                                                new Handler().postDelayed(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        Toast.makeText(getContext(), "شكرًا لك، سنقوم بإضافة العبارة",
+                                                                Toast.LENGTH_LONG).show();
+                                                        progress.setVisibility(View.INVISIBLE);
+                                                        byuser.setText("");
+                                                    }
+                                                }, 2000);
+
+                                            }
+                                        }
+
                                     }
                                 }
         );

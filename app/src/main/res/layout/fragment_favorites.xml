@@ -33,7 +33,18 @@
             android:textColor="#FFFFFF"
             android:textSize="21sp" />
     </RelativeLayout>
-<LinearLayout
+
+    <com.github.ybq.android.spinkit.SpinKitView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/progress"
+        style="@style/SpinKitView.Pulse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+        app:SpinKit_Color="@color/colorPrimary" />
+
+    <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -70,6 +81,45 @@
         android:layout_height="match_parent"
         android:visibility="invisible">
 
+
+        <ImageView
+            android:id="@+id/screen"
+            android:layout_width="300dp"
+            android:layout_height="400dp"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:alpha="0.3"
+            android:background="@drawable/rounded" />
+
+        <ScrollView
+            android:id="@+id/sentenceS"
+            android:layout_width="300dp"
+            android:layout_height="350dp"
+            android:layout_centerInParent="true">
+
+            <RelativeLayout
+                android:layout_width="300dp"
+                android:layout_height="350dp">
+                <TextView
+                    android:id="@+id/fullsentence"
+                    android:layout_width="300dp"
+                    android:layout_height="350dp"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="115dp"
+                    android:layout_marginRight="8dp"
+                    android:fontFamily="@font/cairo"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="16dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="16dp"
+                    android:textAlignment="center"
+                    android:textColor="#FFFFFF"
+                    android:textSize="21sp" />
+
+            </RelativeLayout>
+        </ScrollView>
         <LinearLayout
             android:layout_width="300dp"
             android:layout_height="wrap_content"
@@ -86,40 +136,13 @@
                 android:src="@drawable/ic_close_black_24dp" />
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/screen"
-            android:layout_width="300dp"
-            android:layout_height="400dp"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center"
-            android:alpha="0.3"
-            android:background="@drawable/rounded" />
-
-
-        <TextView
-            android:id="@+id/fullsentence"
-            android:layout_width="300dp"
-            android:layout_height="350dp"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="115dp"
-            android:layout_marginRight="8dp"
-            android:fontFamily="@font/cairo"
-            android:paddingLeft="10dp"
-            android:paddingTop="16dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="16dp"
-            android:textAlignment="center"
-            android:textColor="#FFFFFF"
-            android:textSize="21sp" />
 
         <RelativeLayout
             android:layout_width="200dp"
             android:layout_height="50dp"
-            android:layout_below="@id/fullsentence"
-            android:layout_alignEnd="@id/fullsentence"
-            android:layout_alignRight="@id/fullsentence">
+            android:layout_below="@id/sentenceS"
+            android:layout_alignEnd="@id/sentenceS"
+            android:layout_alignRight="@id/sentenceS">
 
             <LinearLayout
 

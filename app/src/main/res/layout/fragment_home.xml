@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/ti"
     android:fitsSystemWindows="true"
     tools:context=".Home"
@@ -16,38 +17,31 @@
 
         <RelativeLayout
             android:id="@+id/holder"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:background="@color/ti">
 
             <ImageView
-                android:id="@+id/sunlogo"
-                android:layout_width="80dp"
-                android:layout_height="160dp"
-                android:layout_centerInParent="true"
-                android:src="@drawable/sunlogo" />
-
-            <ImageView
-                android:id="@+id/cloudlogo"
+                android:id="@+id/logo"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
+                android:paddingBottom="15dp"
                 android:layout_centerInParent="true"
-                android:src="@drawable/cloudlogo" />
+                android:src="@drawable/n" />
 
             <TextView
                 android:id="@+id/logotext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/cloudlogo"
-                android:layout_centerInParent="true"
+                android:layout_below="@id/logo"
+                android:layout_centerHorizontal="true"
                 android:fontFamily="@font/cairo"
                 android:text="دَفْعَة"
                 android:textColor="#FFFFFF"
                 android:textSize="26sp" />
 
         </RelativeLayout>
-
         <RelativeLayout
             android:id="@+id/area"
             android:layout_width="match_parent"
@@ -75,8 +69,8 @@
 
             <ScrollView
                 android:id="@+id/sentenceS"
-                android:layout_width="300dp"
-                android:layout_height="350dp"
+                android:layout_width="290dp"
+                android:layout_height="340dp"
                 android:layout_centerInParent="true">
 
                 <RelativeLayout

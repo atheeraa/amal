@@ -189,34 +189,7 @@
 
             </RelativeLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/sendnotifCB"
-                android:focusable="false"
-               android:id="@+id/freq"
-                android:visibility="invisible"
-                android:orientation="horizontal">
-                <Spinner
 
-                    android:id="@+id/reps"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                </Spinner>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/cairo"
-                    android:text="كم مرة؟"
-                    android:textAlignment="center"
-                    android:textColor="#FFFFFF"
-                    android:textSize="14sp" />
-
-            </LinearLayout>
         </LinearLayout>
 
     </RelativeLayout>

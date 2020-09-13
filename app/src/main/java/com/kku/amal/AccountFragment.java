@@ -1,18 +1,9 @@
 package com.kku.amal;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-
 import android.app.Activity;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -321,7 +312,6 @@ public class AccountFragment extends Fragment {
      }
 */
     private void signIn() {
-        Log.d("1", "signIn");
         if (!validateFormSignIn()) {
             return;
         }
@@ -333,8 +323,7 @@ public class AccountFragment extends Fragment {
                 .addOnCompleteListener((Activity) getContext(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d("1", "signIn:onComplete:" + task.isSuccessful());
-                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                          FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                         if (!task.isSuccessful()) {
                             Toast.makeText(getContext(), "حدث خطأ ما!",
@@ -371,7 +360,6 @@ public class AccountFragment extends Fragment {
     }
 
     private void signUp() {
-        Log.d("1", "signUp");
         if (!validateFormSignUp()) {
             return;
         }
@@ -391,7 +379,6 @@ public class AccountFragment extends Fragment {
                     .addOnCompleteListener((Activity) getContext(), new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            Log.d("1", "createUser:onComplete:" + task.isSuccessful() + task.getException());
                             if (task.isSuccessful()) {
                                 onAuthSuccess(task.getResult().getUser());
                                 sendEmailVerification();
@@ -421,9 +408,7 @@ public class AccountFragment extends Fragment {
                                 } catch(Exception e) {
                                     Toast.makeText(getContext(), "حدث خطأ ما!",
                                             Toast.LENGTH_SHORT).show();
-
-                                    Log.e("TAG", e.getMessage());
-                                }
+     }
 
                             }
                         }
